@@ -1,50 +1,51 @@
+import { imagenes  } from "../assets/imagenes";
 import "../App.css";
 
 const actividades = [
   {
-    icono: "⚽",
+    imagenes: imagenes.vidaEstudiantil.deporte,
     titulo: "Deportes",
     desc: "Fútbol, baloncesto, atletismo y más. Fomentamos el trabajo en equipo, la disciplina y el espíritu deportivo en todos los niveles.",
     color: "#e8f4fd",
   },
   {
-    icono: "🎨",
+    imagenes: imagenes.vidaEstudiantil.arte,
     titulo: "Artes Plásticas",
     desc: "Talleres de pintura, dibujo y manualidades que desarrollan la creatividad y la expresión artística de cada estudiante.",
     color: "#fdf3e8",
   },
   {
-    icono: "🎵",
+    imagenes: imagenes.vidaEstudiantil.musical,
     titulo: "Educación Musical",
     desc: "Clases de música, coro y actividades rítmicas que cultivan el amor por el arte sonoro desde temprana edad.",
     color: "#f0e8fd",
   },
   {
-    icono: "🔬",
+    imagenes: imagenes.vidaEstudiantil.laboratiorio,
     titulo: "Ciencias y Tecnología",
     desc: "Laboratorio de Informática Educativa y ferias científicas donde los estudiantes exploran e innovan.",
     color: "#e8fdf0",
   },
   {
-    icono: "📚",
+    imagenes: imagenes.vidaEstudiantil.biblioteca,
     titulo: "Biblioteca Escolar",
     desc: "Un espacio de lectura, investigación y aprendizaje autónomo supervisado por personal especializado.",
     color: "#fde8e8",
   },
   {
-    icono: "🤝",
+    imagenes: imagenes.vidaEstudiantil.orientacion,
     titulo: "Orientación y Valores",
     desc: "Programa de orientación que acompaña a los estudiantes en su desarrollo personal, emocional y social.",
     color: "#e8f4fd",
   },
   {
-    icono: "🏠",
+    imagenes: imagenes.vidaEstudiantil.educacionHogar,
     titulo: "Educación para el Hogar",
     desc: "Aprenden habilidades para la vida cotidiana: cocina, costura, nutrición y organización del hogar.",
     color: "#fdf3e8",
   },
   {
-    icono: "🌍",
+    imagenes: imagenes.vidaEstudiantil.lengua,
     titulo: "Idiomas",
     desc: "Clases de inglés impartidas por docentes especializados para abrir puertas al mundo global.",
     color: "#e8fdf0",
@@ -99,9 +100,11 @@ export default function VidaEstudiantil() {
           <div className="ve-act-grid">
             {actividades.map((a, i) => (
               <div className="ve-act-card" key={i} style={{ "--card-bg": a.color } as React.CSSProperties}>
-                <span className="ve-act-icon">{a.icono}</span>
-                <h3>{a.titulo}</h3>
-                <p>{a.desc}</p>
+                <img src={a.imagenes} alt={a.titulo}  className="ve-card-image" />
+                 <div className="ve-act-card-body">       {/* ← div nuevo */}
+                                  <h3>{a.titulo}</h3>
+                   <p>{a.desc}</p>
+                  </div>
               </div>
             ))}
           </div>

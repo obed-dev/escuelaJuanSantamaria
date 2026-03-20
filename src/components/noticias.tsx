@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { imagenes } from "../assets/imagenes";
+import { imagenes } from '../assets/imagenes';
 import "../App.css";
 
 type Noticia = {
@@ -9,7 +9,7 @@ type Noticia = {
   categoria: string;
   resumen: string;
   contenido: string;
-  icono: string;
+  imagenes: string;
   color: string;
 };
 
@@ -19,7 +19,7 @@ const noticias: Noticia[] = [
     titulo: "Rumbo a la Gran Final",
     fecha: "24 de octubre, 2016",
     categoria: "Deportes",
-    icono: "⚽",
+    imagenes: imagenes.noticias.futbol5,
     color: "#e8f4fd",
     resumen: "Minutos antes de abordar el bus, para dirigirse a la gran final de fútbol 7 femenino, a realizarse en Boruca. ¡Muchos éxitos chicas!",
     contenido: "El equipo femenino de fútbol 7 de la Escuela Juan Santamaría se preparó con entusiasmo para la gran final interregional. Con entrenamiento constante y determinación, nuestras estudiantes demostraron que el esfuerzo y la dedicación llevan al éxito. El viaje a Boruca representó un hito importante en la vida deportiva de la institución.",
@@ -29,7 +29,7 @@ const noticias: Noticia[] = [
     titulo: "Campeonas Interregionales",
     fecha: "14 de octubre, 2016",
     categoria: "Deportes",
-    icono: "🏆",
+    imagenes: imagenes.noticias.campeonas,
     color: "#fdf3e8",
     resumen: "Hoy se realizó la final contra el Colegio Sant Jude, en el Gimnasio de Curridabat. ¡Las chicas de nuestra escuela quedaron campeonas!",
     contenido: "En un emocionante partido final celebrado en el Gimnasio de Curridabat, el equipo femenino de fútbol 7 de la Escuela Juan Santamaría se coronó campeón interregional al enfrentarse y superar al Colegio Sant Jude. La comunidad educativa celebró con orgullo este logro que refleja el trabajo en equipo, la disciplina y el espíritu deportivo que se promueve en nuestra institución.",
@@ -39,7 +39,7 @@ const noticias: Noticia[] = [
     titulo: "Reinado del Maíz",
     fecha: "12 de octubre, 2016",
     categoria: "Cultura",
-    icono: "🌽",
+    imagenes: imagenes.noticias.reinado,
     color: "#e8fdf0",
     resumen: "El día de hoy se realizó el Reinado del Maíz con los estudiantes de primer ciclo, realizado con el fin de recaudar fondos para la comunidad.",
     contenido: "Una colorida y alegre celebración llenó las instalaciones de la escuela con motivo del Reinado del Maíz, actividad organizada con los estudiantes de primer ciclo. Este evento tradicional, lleno de cultura y tradición costarricense, tuvo como objetivo principal la recaudación de fondos para apoyar distintas necesidades de la comunidad educativa. Los estudiantes participaron con entusiasmo, demostrando el orgullo por las raíces culturales del país.",
@@ -73,9 +73,10 @@ export default function Noticias() {
             <button className="nt-back" onClick={() => setSeleccionada(null)}>
               ← Volver a Noticias
             </button>
+           
             <div className="nt-articulo-card">
               <div className="nt-articulo-icon" style={{ background: seleccionada.color }}>
-                <img src={imagenes.noticias.campeonas} alt="rumbo a la gran final foto"  />
+                <img src={seleccionada.imagenes} alt="rumbo a la gran final foto" className="nt-articulo-image" />
               </div>
               <h2>{seleccionada.titulo}</h2>
               
@@ -87,6 +88,7 @@ export default function Noticias() {
               <p className="nt-resumen-bold">{seleccionada.resumen}</p>
               <p className="nt-contenido-full">{seleccionada.contenido}</p>
             </div>
+          
           </div>
         </section>
       </main>
@@ -133,7 +135,7 @@ export default function Noticias() {
                 onClick={() => setSeleccionada(n)}
               >
                 <div className="nt-card-img" style={{ background: n.color }}>
-                  <span>{n.icono}</span>
+                <img src={n.imagenes} alt={n.titulo}  />
                 </div>
                 <div className="nt-card-body">
                   <div className="nt-card-meta">

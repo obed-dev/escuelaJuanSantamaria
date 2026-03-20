@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import {Routes, Route, NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
-
+import { imagenes } from "../src/assets/imagenes";
 import SobreNosotros from "./components/sobreNosotros";
 import PersonalDocente from "./components/personalDocente";
 import VidaEstudiantil from "./components/vidaEstudiantil";
-import Noticias from "./components/noticias";
+import Noticias from './components/noticias';
+
 
 /* ─── NAVBAR (compartido en todas las rutas) ─── */
 function Navbar() {
@@ -38,7 +39,9 @@ function Navbar() {
     <>
       <nav className="nav">
         <div className="nav-logo" onClick={() => navigate("/")}>
-          <div className="nav-escudo">JS</div>
+          <div className="nav-escudo">
+            <img src={imagenes.sobreNosotros.escudo} alt="escudo de juan santamaria"/>
+          </div>
           <div className="nav-title">
             Escuela Juan Santamaría
             <span>Curridabat · Excelencia Educativa</span>
@@ -132,9 +135,9 @@ function Footer() {
 
 /* ─── HOME PAGE ─── */
 const newsData = [
-  { icon: "🏆", bg: "linear-gradient(135deg, #e8f4fd 0%, #b5d4f4 100%)", tag: "Deportes", title: "Campeonas Interregionales de Fútbol 7", desc: "Nuestro equipo femenino se coronó campeón en el Gimnasio de Curridabat.", date: "14 de oct, 2016" },
-  { icon: "🌽", bg: "linear-gradient(135deg, #e8fdf0 0%, #c0dd97 100%)", tag: "Cultura", title: "Reinado del Maíz", desc: "Actividad cultural de primer ciclo para recaudar fondos para la comunidad educativa.", date: "12 de oct, 2016" },
-  { icon: "⚽", bg: "linear-gradient(135deg, #fff8e1 0%, #fac775 100%)", tag: "Deportes", title: "Rumbo a la Gran Final", desc: "El equipo de fútbol 7 femenino viajó a Boruca para representar a la escuela.", date: "24 de oct, 2016" },
+  { imagenes: imagenes.noticias.campeonas , bg: "linear-gradient(135deg, #e8f4fd 0%, #b5d4f4 100%)", tag: "Deportes", title: "Campeonas Interregionales de Fútbol 7", desc: "Nuestro equipo femenino se coronó campeón en el Gimnasio de Curridabat.", date: "14 de oct, 2016" },
+  { imagenes: imagenes.noticias.reinado, bg: "linear-gradient(135deg, #e8fdf0 0%, #c0dd97 100%)", tag: "Cultura", title: "Reinado del Maíz", desc: "Actividad cultural de primer ciclo para recaudar fondos para la comunidad educativa.", date: "12 de oct, 2016" },
+  { imagenes: imagenes.noticias.futbol5, bg: "linear-gradient(135deg, #fff8e1 0%, #fac775 100%)", tag: "Deportes", title: "Rumbo a la Gran Final", desc: "El equipo de fútbol 7 femenino viajó a Boruca para representar a la escuela.", date: "24 de oct, 2016" },
 ];
 
 const sectionsData = [
@@ -221,12 +224,13 @@ function Home() {
           </div>
           <div className="mv-grid">
             <div className="mv-card fade-in">
-              <span className="mv-icon">🌟</span>
+            <img src={imagenes.sobreNosotros.escuela} alt="foto de la escuela juan santamaria" />
+             
               <h3>Misión</h3>
               <p>Formar individuos integralmente críticos, creativos y con altos valores, capaces de enfrentar en forma positiva y responsable las diferentes situaciones cotidianas, orientándolos al mejoramiento en su calidad de vida.</p>
             </div>
             <div className="mv-card fade-in">
-              <span className="mv-icon">🔭</span>
+              <img src={imagenes.sobreNosotros.escudo} alt="escudo de la escuela juan santamaria"  />
               <h3>Visión</h3>
               <p>Orientar racionalmente el uso de los recursos para fortalecer el proceso de enseñanza-aprendizaje, promoviendo la excelencia y los valores éticos, cívicos y culturales que contribuyan al desarrollo formativo de cada individuo y de la comunidad.</p>
             </div>
@@ -272,7 +276,9 @@ function Home() {
           <div className="news-grid">
             {newsData.map((n, i) => (
               <div className="news-card fade-in" key={i} onClick={() => navigate("/noticias")} style={{ cursor: "pointer" }}>
-                <div className="news-img" style={{ background: n.bg }}>{n.icon}</div>
+                <div className="news-img" style={{ background: n.bg }}>
+                  <img src={n.imagenes} alt={n.title}  className="nt-articulo-image"/>
+                </div>
                 <div className="news-body">
                   <span className="news-tag">{n.tag}</span>
                   <h4>{n.title}</h4>
