@@ -4,7 +4,7 @@ import "./App.css";
 import { imagenes } from "../src/assets/imagenes";
 import { AppRouter } from "./Router/AppRouter";
 import emailjs from '@emailjs/browser';
-import { email_Init_PUBLIC_KEY , recaptcha_SITE_KEY } from "../env";
+import { email_Init_PUBLIC_KEY , recaptcha_SITE_KEY } from "./env";
 import ReCAPTCHA from "react-google-recaptcha";
 
 
@@ -203,7 +203,7 @@ export function Home() {
     setButtonText('Enviar Mensaje');
 
     recaptchaRef.current?.reset();
-    setCaptchaValue(null); // 🔥 importante
+    setCaptchaValue(null); //  importante
 
     setTimeout(() => setSent(false), 2000);
 
