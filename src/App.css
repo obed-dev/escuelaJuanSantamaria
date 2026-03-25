@@ -808,8 +808,13 @@ footer {
   border-bottom: 2px solid var(--fondo-sec);
   position: sticky; top: 68px; z-index: 50;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+   overflow-x: auto;
+    scrollbar-width: none; /* firefox */
 }
 
+.pd-tabs-bar::-webkit-scrollbar {
+  display: none; /* Chrome */
+}
 .pd-tab {
   background: none; border: none; cursor: pointer;
   font-family: 'Crimson Pro', serif; font-size: 0.92rem;
@@ -896,7 +901,7 @@ footer {
 
 .pd-card-header {
   background: var(--nav-bg);
-  padding: 1rem 1.3rem;
+  padding: 1rem 1rem;
   display: flex; align-items: center; gap: 0.7rem;
 }
 
@@ -924,10 +929,55 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
-  .pd-tabs-bar { gap: 0; overflow-x: auto; justify-content: flex-start; padding: 0 1rem; }
-  .pd-tab { padding: 1rem 1.2rem; white-space: nowrap; font-size: 0.82rem; }
-  .pd-content { padding: 2.5rem 1.2rem 4rem; }
-  .pd-grid { grid-template-columns: 1fr; }
+
+  /* Layout principal → todo en columna */
+  .pd-docentes-layout {
+    display: flex;
+    flex-direction: column;
+    
+    gap: 1.2rem;
+  }
+
+  /* Cards ocupan todo el ancho */
+  .pd-card {
+    width: 100%;
+  }
+
+  /* Quitar cualquier layout raro interno */
+  .pd-card-main,
+  .pd-card-top {
+    width: 100%;
+  }
+
+  /* Grid restante → también en columna */
+  .pd-rest-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  /* Mejora visual */
+  .pd-card-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pd-lista li {
+    font-size: 0.9rem;
+  }
+}
+@media (min-width: 701px) and (max-width: 1024px) {
+
+  .pd-rest-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .pd-docentes-layout {
+    gap: 1.5rem;
+  }
 }
 
 .ve-main { padding-top: 68px; }

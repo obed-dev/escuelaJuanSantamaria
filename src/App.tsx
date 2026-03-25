@@ -4,6 +4,8 @@ import "./App.css";
 import { imagenes } from "../src/assets/imagenes";
 import { AppRouter } from "./Router/AppRouter";
 import emailjs from '@emailjs/browser';
+import { email_Init_PUBLIC_KEY , recaptcha_SITE_KEY } from "../env";
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 
@@ -157,9 +159,13 @@ export function Home() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
+
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+
   useEffect(() => {
     // Initialize EmailJS with your public key
-    emailjs.init('Il5nJlAS85u2wmL_8'); // Replace with your actual public key from EmailJS dashboard
+    emailjs.init(email_Init_PUBLIC_KEY); // Replace with your actual public key from EmailJS dashboard
 
     observerRef.current = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
@@ -170,30 +176,45 @@ export function Home() {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setButtonText('Enviando...');
-    try {
-      await emailjs.send(
-        'service_nujbeyj', // Your service ID
-        'template_m9raffd', // Your template ID
-        {
-          from_name: formData.nombre,
-          from_email: formData.email,
-          message: formData.mensaje,
-        }
-      );
-      setSent(true);
-      setFormData({ nombre: "", email: "", mensaje: "" });
-      setButtonText('Enviar Mensaje');
-      setTimeout(() => setSent(false), 2000);
-      'Il5nJlAS85u2wmL_8'
+  e.preventDefault();
 
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Error al enviar el mensaje. Inténtalo de nuevo.');
-      setButtonText('Enviar Mensaje');
-    }
-  };
+  if (!captchaValue) {
+    alert("Por favor verifica que no eres un robot");
+    return;
+  }
+
+  setButtonText('Enviando...');
+
+  try {
+    await emailjs.send(
+      'service_nujbeyj',
+      'template_m9raffd',
+      {
+        from_name: formData.nombre,
+        from_email: formData.email,
+        message: formData.mensaje,
+        "g-recaptcha-response": captchaValue,
+      },
+      email_Init_PUBLIC_KEY
+    );
+
+    setSent(true);
+    setFormData({ nombre: "", email: "", mensaje: "" });
+    setButtonText('Enviar Mensaje');
+
+    recaptchaRef.current?.reset();
+    setCaptchaValue(null); // 🔥 importante
+
+    setTimeout(() => setSent(false), 2000);
+
+  } catch (error) {
+    console.error('Error sending email:', error);
+    console.log(error);
+    
+    alert('Error al enviar el mensaje. Inténtalo de nuevo.');
+    setButtonText('Enviar Mensaje');
+  }
+};
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -380,6 +401,12 @@ export function Home() {
                     <textarea name="mensaje" id="message" rows={4} placeholder="Escriba su consulta aquí..." required value={formData.mensaje}
                       onChange={(e) => setFormData((p) => ({ ...p, mensaje: e.target.value }))} />
                   </div>
+                  <ReCAPTCHA
+                  sitekey={recaptcha_SITE_KEY}
+                 ref={recaptchaRef}
+                   onChange={(value) => setCaptchaValue(value)}
+                 style={{ display: "inline-block" , padding: "1rem 0" }}   />
+                              
                   <button type="submit" className="btn btn-nav">{buttonText}</button>
                 </form>
               )}
