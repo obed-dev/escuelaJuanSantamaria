@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import {Routes, Route, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import { imagenes } from "../src/assets/imagenes";
-import SobreNosotros from "./components/sobreNosotros";
-import PersonalDocente from "./components/personalDocente";
-import VidaEstudiantil from "./components/vidaEstudiantil";
-import Noticias from './components/noticias';
+import { AppRouter } from "./Router/AppRouter";
+import emailjs from '@emailjs/browser';
+
 
 
 /* ─── NAVBAR (compartido en todas las rutas) ─── */
-function Navbar() {
+export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,6 +24,9 @@ function Navbar() {
     }
     setMenuOpen(false);
   };
+
+
+
 
   const links = [
     { label: "Inicio", action: () => scrollTo("inicio") },
@@ -94,7 +96,7 @@ function Navbar() {
 }
 
 /* ─── FOOTER (compartido) ─── */
-function Footer() {
+export function Footer() {
   const navigate = useNavigate();
   return (
     <footer>
@@ -147,13 +149,18 @@ const sectionsData = [
   { icon: "📰", title: "Noticias y Eventos", desc: "Mantente informado sobre todo lo que sucede en nuestra comunidad escolar", to: "/noticias" },
 ];
 
-function Home() {
+export function Home() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ nombre: "", email: "", mensaje: "" });
   const [sent, setSent] = useState(false);
+  const [buttonText, setButtonText] = useState('Enviar Mensaje');
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
+    // Initialize EmailJS with your public key
+    emailjs.init('Il5nJlAS85u2wmL_8'); // Replace with your actual public key from EmailJS dashboard
+
     observerRef.current = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
       { threshold: 0.12 }
@@ -162,11 +169,30 @@ function Home() {
     return () => observerRef.current?.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setFormData({ nombre: "", email: "", mensaje: "" });
-    setTimeout(() => setSent(false), 4000);
+    setButtonText('Enviando...');
+    try {
+      await emailjs.send(
+        'service_nujbeyj', // Your service ID
+        'template_m9raffd', // Your template ID
+        {
+          from_name: formData.nombre,
+          from_email: formData.email,
+          message: formData.mensaje,
+        }
+      );
+      setSent(true);
+      setFormData({ nombre: "", email: "", mensaje: "" });
+      setButtonText('Enviar Mensaje');
+      setTimeout(() => setSent(false), 2000);
+      'Il5nJlAS85u2wmL_8'
+
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Error al enviar el mensaje. Inténtalo de nuevo.');
+      setButtonText('Enviar Mensaje');
+    }
   };
 
   const scrollTo = (id: string) => {
@@ -338,23 +364,23 @@ function Home() {
                   <p style={{ fontSize: "0.95rem", color: "var(--gris-texto)", marginTop: "0.4rem" }}>Nos pondremos en contacto pronto.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
+                <form ref={formRef} onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>Nombre completo</label>
-                    <input type="text" placeholder="Su nombre" required value={formData.nombre}
+                    <input type="text" name="nombre" placeholder="Su nombre" required value={formData.nombre}
                       onChange={(e) => setFormData((p) => ({ ...p, nombre: e.target.value }))} />
                   </div>
                   <div className="form-group">
                     <label>Correo electrónico</label>
-                    <input type="email" placeholder="correo@ejemplo.com" required value={formData.email}
+                    <input type="email" name="email" placeholder="correo@ejemplo.com" required value={formData.email}
                       onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))} />
                   </div>
                   <div className="form-group">
-                    <label>Mensaje</label>
-                    <textarea rows={4} placeholder="Escriba su consulta aquí..." required value={formData.mensaje}
+                    <label >Mensaje</label>
+                    <textarea name="mensaje" id="message" rows={4} placeholder="Escriba su consulta aquí..." required value={formData.mensaje}
                       onChange={(e) => setFormData((p) => ({ ...p, mensaje: e.target.value }))} />
                   </div>
-                  <button type="submit" className="btn btn-nav">Enviar Mensaje</button>
+                  <button type="submit" className="btn btn-nav">{buttonText}</button>
                 </form>
               )}
             </div>
@@ -375,15 +401,7 @@ function Layout() {
 
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-        <Route path="/personal-docente" element={<PersonalDocente />} />
-        <Route path="/vida-estudiantil" element={<VidaEstudiantil />} />
-        <Route path="/noticias" element={<Noticias />} />
-      </Routes>
-      <Footer />
+     <AppRouter />
     </>
   );
 }

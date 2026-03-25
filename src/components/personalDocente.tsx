@@ -203,21 +203,67 @@ export default function PersonalDocente() {
         <div className="pd-container">
           <h2 className="pd-section-title">{labels[tab]}</h2>
           <div className="pd-divider" />
-          <div className="pd-grid">
-            {data[tab].map((cat, i) => (
-              <div className="pd-card" key={i}>
+          {tab === "docentes" ? (
+            <div className="pd-docentes-layout">
+              <div className="pd-card pd-card-main">
                 <div className="pd-card-header">
-                  <span className="pd-card-icon">{cat.icono}</span>
-                  <h3>{cat.titulo}</h3>
+                  <span className="pd-card-icon">{data.docentes[0].icono}</span>
+                  <h3>{data.docentes[0].titulo}</h3>
                 </div>
                 <ul className="pd-lista">
-                  {cat.personas.map((p, j) => (
+                  {data.docentes[0].personas.map((p, j) => (
                     <li key={j}>{p}</li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
+
+              {data.docentes.slice(1, 3).map((cat, i) => (
+                <div className="pd-card pd-card-top" key={cat.titulo}>
+                  <div className="pd-card-header">
+                    <span className="pd-card-icon">{cat.icono}</span>
+                    <h3>{cat.titulo}</h3>
+                  </div>
+                  <ul className="pd-lista">
+                    {cat.personas.map((p, j) => (
+                      <li key={`${i}-${j}`}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+
+              <div className="pd-rest-grid">
+                {data.docentes.slice(3).map((cat, i) => (
+                  <div className="pd-card" key={cat.titulo}>
+                    <div className="pd-card-header">
+                      <span className="pd-card-icon">{cat.icono}</span>
+                      <h3>{cat.titulo}</h3>
+                    </div>
+                    <ul className="pd-lista">
+                      {cat.personas.map((p, j) => (
+                        <li key={`${i}-${j}`}>{p}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="pd-grid">
+              {data[tab].map((cat, i) => (
+                <div className="pd-card" key={i}>
+                  <div className="pd-card-header">
+                    <span className="pd-card-icon">{cat.icono}</span>
+                    <h3>{cat.titulo}</h3>
+                  </div>
+                  <ul className="pd-lista">
+                    {cat.personas.map((p, j) => (
+                      <li key={j}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>
